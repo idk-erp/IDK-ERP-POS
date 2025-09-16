@@ -3,11 +3,13 @@
 namespace App\Filament\Resources\Units\Tables;
 
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 
@@ -17,13 +19,19 @@ class UnitsTable
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('id')->sortable()->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('name')->sortable()->searchable(),
+                TextColumn::make('short_name')->sortable()->searchable(),
+                TextColumn::make('description')->limit(50)->wrap()->sortable()->searchable(),
+                TextColumn::make('created_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('updated_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 TrashedFilter::make(),
             ])
             ->recordActions([
                 ViewAction::make(),
+                DeleteAction::make(),
                 EditAction::make(),
             ])
             ->toolbarActions([
