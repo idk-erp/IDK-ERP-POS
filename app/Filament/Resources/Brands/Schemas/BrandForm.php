@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Brands\Schemas;
 
+use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 
 class BrandForm
@@ -10,7 +11,10 @@ class BrandForm
     {
         return $schema
             ->components([
-                //
+                TextInput::make('name')
+                    ->label('Brand Name')
+                    ->required()
+                    ->maxLength(255),
             ]);
     }
 }

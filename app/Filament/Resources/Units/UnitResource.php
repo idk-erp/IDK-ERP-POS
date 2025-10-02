@@ -17,12 +17,16 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use UnitEnum;
 
 class UnitResource extends Resource
 {
     protected static ?string $model = Unit::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedScale;
+
+
+    protected static string|UnitEnum|null $navigationGroup = 'Product Management';
 
     protected static ?string $recordTitleAttribute = 'Unit';
 
