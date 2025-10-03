@@ -27,13 +27,13 @@ class ProductForm
 
                 Select::make('category_id')
                     ->relationship('category', 'name')
-                    ->searchable()
-                    ->required(),
+                    ->preload()
+                    ->searchable(),
 
                 Select::make('brand_id')
                     ->relationship('brand', 'name')
                     ->searchable()
-                    ->required()
+                    ->preload()
                     ->optionsLimit(5) // show at least 5 items before search
                     ->createOptionForm([ // mini create form inside the dropdown
                         TextInput::make('name')
@@ -45,6 +45,7 @@ class ProductForm
                     ->relationship('unit', 'name')
                     ->searchable()
                     ->required()
+                    ->preload()
                     ->optionsLimit(5) // show at least 5 items before search
                     ->createOptionForm([ // mini create form inside the dropdown
                         TextInput::make('name')
