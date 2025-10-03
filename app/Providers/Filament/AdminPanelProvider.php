@@ -2,10 +2,20 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Resources\Brands\BrandResource;
+use App\Filament\Resources\Categories\CategoryResource;
+use App\Filament\Resources\Currencies\CurrencyResource;
+use App\Filament\Resources\Locations\LocationResource;
+use App\Filament\Resources\Products\ProductResource;
+use App\Filament\Resources\Purchases\PurchaseResource;
+use App\Filament\Resources\Settings\SettingResource;
+use App\Filament\Resources\Units\UnitResource;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationBuilder;
+use Filament\Navigation\NavigationGroup;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -26,6 +36,7 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->default()
             ->id('admin')
+            ->path('/')
             ->login()
             ->colors([
                 'primary' => Color::Amber,
@@ -38,6 +49,33 @@ class AdminPanelProvider extends PanelProvider
                 Dashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
+            ->navigation(function (NavigationBuilder $builder): NavigationBuilder {
+                return $builder
+                    ->items([
+                        ...Dashboard::getNavigationItems(),
+                        ...CurrencyResource::getNavigationItems(),
+                        ...SettingResource::getNavigationItems(),
+                    ])
+                    ->groups([
+                        NavigationGroup::make('Products')
+                            ->label('Products')
+                            ->extraSidebarAttributes(['class' => 'es-sidebar-group'])
+                            ->icon('heroicon-c-cube')
+                            ->items([
+                                ...BrandResource::getNavigationItems(),
+                                ...CategoryResource::getNavigationItems(),
+                                ...ProductResource::getNavigationItems(),
+                                ...UnitResource::getNavigationItems(),
+                            ]),
+                        NavigationGroup::make('Purchases')
+                            ->label('Purchases')
+                            ->extraSidebarAttributes(['class' => 'es-sidebar-group'])
+                            ->icon('heroicon-c-cube')
+                            ->items([
+                                ...PurchaseResource::getNavigationItems(),
+                            ]),
+                    ]);
+            })
             ->widgets([
                 AccountWidget::class,
                 FilamentInfoWidget::class,
